@@ -1,0 +1,7 @@
+# IDE dirs
+.idea
+*.iml
+
+# Build dirs
+out
+build
