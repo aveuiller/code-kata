@@ -1,4 +1,4 @@
-package linked_list.insert_node_simply_linked;
+package linked_list.insert_node_singly_linked;
 
 /**
  * Challenge: https://www.hackerrank.com/challenges/insert-a-node-at-a-specific-position-in-a-linked-list
