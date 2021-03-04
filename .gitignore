@@ -1,6 +1,7 @@
 # IDE dirs
 .idea
 *.iml
+venv
 
 # Build dirs
 out
