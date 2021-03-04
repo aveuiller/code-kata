@@ -73,6 +73,20 @@ def levelOrderNodes(nodes, result):
         levelOrderNodes(children, result)
 
 
+def iterative_level_order(root):
+    """Iterative edition"""
+    stack_tovisit = [root]
+    traversal = []
+    while stack_tovisit:
+        node = stack_tovisit.pop(0)
+        traversal.append(str(node.info))
+        if node.left:
+            stack_tovisit.append(node.left)
+        if node.right:
+            stack_tovisit.append(node.right)
+
+    print(" ".join(traversal))
+
 if __name__ == '__main__':
     tree = BinarySearchTree()
     for i in TEST_CASE_2:
