@@ -4,22 +4,25 @@ import os
 from typing import List, Optional
 from functools import reduce
 
+
 def load() -> List[str]:
     dir = os.path.dirname(os.path.abspath(__file__))
-    with open(os.path.join(dir, 'input.txt')) as f: 
+    with open(os.path.join(dir, 'input.txt')) as f:
         return f.readlines()
+
 
 def is_part_number(schematic: List[str], line_index: int,
                    lower_boundary: int, upper_boundary: int) -> bool:
     alpharegex = re.compile(r"[^.0-9]")
     lower_i = max(0, line_index - 1)
-    upper_i = min(len(schematic) , line_index + 2)
+    upper_i = min(len(schematic), line_index + 2)
     for line in schematic[lower_i:upper_i]:
         lower_j = max(0, lower_boundary - 1)
         upper_j = min(len(line), upper_boundary + 2)
         if re.search(alpharegex, line[lower_j:upper_j].strip()):
             return True
     return False
+
 
 def main_01(schematic: List[str]) -> int:
     total = 0
@@ -41,11 +44,12 @@ def main_01(schematic: List[str]) -> int:
                         total += int(current_number)
                     current_number = ''
     return total
-     
+
+
 def get_adjactent_numbers(schematic: List[str], line_index: int,
                           star_index: int) -> List[int]:
     digitregex = re.compile(r"[0-9]")
-    lower_i, upper_i = max(0, line_index - 1), min(len(schematic), line_index + 2)    
+    lower_i, upper_i = max(0, line_index - 1), min(len(schematic), line_index + 2)
 
     numbers = []
     for line in schematic[lower_i:upper_i]:
@@ -64,6 +68,7 @@ def get_adjactent_numbers(schematic: List[str], line_index: int,
                 numbers.append(int(line[current_l_j:current_u_j + 1]))
     return numbers
 
+
 def main_02(schematic: List[str]) -> int:
     total = 0
     for i, schem_line in enumerate(schematic):
@@ -74,7 +79,7 @@ def main_02(schematic: List[str]) -> int:
             if len(numbers) >= 2:
                 total += reduce(lambda x, y: x * y, numbers)
     return total
-        
+
 
 if __name__ == '__main__':
     print(f"First Response: {main_01(load())}")
