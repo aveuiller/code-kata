@@ -1,5 +1,5 @@
-# https://adventofcode.com/2023/day/1
-import os, re
+# https://adventofcode.com/2023/day/8
+import os, re, math
 from typing import List, Optional
 from functools import reduce
 
@@ -40,6 +40,29 @@ def main_01(directions: List[str]) -> int:
 
     return i
 
+def lcm(outs: List[int]) -> int:
+    result = 1
+    for i in outs:
+        result = result * i // math.gcd(result, i)
+    return result
+
+def _converging_at(nodes_outputs: dict[str, dict[str, List[int]]]) -> Optional[int]:
+    rates = []
+    for outputs in nodes_outputs:
+        # Not enough data to compute
+        if not outputs:
+            return None
+
+        for _, ends in outputs.items():
+            # Not enough data to compute
+            if len(ends) < 2:
+                return None
+    
+            rates.append(ends[1] - ends[0])
+    print(nodes_outputs)
+    print(rates)
+    print(lcm(rates))
+    return lcm(rates)
 
 def main_02(directions: List[str]) -> int:
     start_suffix = "A"
@@ -49,9 +72,15 @@ def main_02(directions: List[str]) -> int:
 
     i = 0
     current_nodes = [node for node in nodes.keys() if node.endswith(start_suffix)]
+    nodes_outputs = [dict() for _ in current_nodes]
     while not all([node.endswith(end_suffix) for node in current_nodes]):
         for j in range(len(current_nodes)):
             current_nodes[j] = nodes[current_nodes[j]][lr_instructions[i % len(lr_instructions)]]
+            
+            if current_nodes[j].endswith(end_suffix):
+                nodes_outputs[j].setdefault(current_nodes[j], []).append(i)
+                if end := _converging_at(nodes_outputs):
+                    return end
         i += 1
 
     return i
