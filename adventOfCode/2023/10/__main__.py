@@ -46,6 +46,7 @@ def print_map(pipe_map: dict) -> None:
     print(' \n'.join((' '.join(str(i) + line) for i, line in enumerate(pipe_map))))
 
 
+
 def main_01(pipe_map: List[str], return_count=False) -> int:
     visited = []
 
