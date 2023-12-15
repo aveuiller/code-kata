@@ -20,41 +20,6 @@ BROKEN = "#"
 WORKING = "."
 UNKNOWN = "?"
 
-
-@cache
-def is_possible(spring: str, size: int) -> bool:
-    pattern = r"^[#|\?]{" + str(size) + "}" + r"(\?|$)"
-    return re.match(pattern, spring) is not None
-
-
-@cache
-def count_placements(springs: Tuple[str], broken_counts: Tuple[int]) -> int:
-    if not broken_counts:
-        return 1 if all(spring.replace("?", "") == "" for spring in springs) else 0
-    if not springs:
-        return 0
-
-    first_spring = springs[0]
-    remaining_springs = springs[1:]
-    if not first_spring:
-        return count_placements(remaining_springs, broken_counts)
-
-    if first_spring[0] == BROKEN:
-        return (
-            count_placements((first_spring[broken_counts[0] + 1:],) + remaining_springs, broken_counts[1:])
-            if is_possible(first_spring, broken_counts[0])
-            else 0
-        )
-    res_when_empty = count_placements((first_spring[1:],) + remaining_springs, broken_counts)
-    res_when_broken = count_placements((f"#{first_spring[1:]}",) + remaining_springs, broken_counts)
-    return res_when_empty + res_when_broken
-
-
-def compute_positions(gears: str, broken_counts: List[int]) -> int:
-    broken_groups = gears.split('.')
-    return count_placements(tuple(broken_groups), tuple(broken_counts))
-
-
 def main_01(gears_records: List[str], unfold: bool = False) -> int:
     total = 0
     for record in gears_records:
