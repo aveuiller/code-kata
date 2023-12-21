@@ -1,11 +1,10 @@
 # https://adventofcode.com/2023/day/19
-import json
-import re
 import os
+import pprint
+import re
 import sys
 from functools import reduce
-from typing import List, Optional, Tuple, Dict, Set, Iterator, Iterable
-import pprint
+from typing import List, Optional, Tuple, Dict, Iterator
 
 pp = pprint.PrettyPrinter(depth=4)
 
@@ -25,6 +24,7 @@ class Condition:
     PARSING = re.compile(r"(?:(?P<operand>[xmas])(?P<operator>[<>])(?P<value>\d+):)?(?P<workflow>\w+)")
 
     def __init__(self, definition: str):
+        self.definition = definition
         match = re.match(self.PARSING, definition).groupdict()
         self.operand = match.get("operand")
         self.operator = match.get("operator")
@@ -39,6 +39,13 @@ class Condition:
 
     def __repr__(self):
         return f"Condition({self.expression}, {self.workflow})"
+
+    def revert(self) -> 'Condition':
+        copy = Condition(self.definition)
+        if copy.expression is not None:
+            copy.operator = '>' if self.operand == '<' else '<'
+            copy.value = self.value + 1 if self.operand == '<' else self.value - 1
+        return copy
 
 
 class Workflow:
@@ -178,7 +185,7 @@ def discover_conditions(
 
     breadth = discover_conditions(workflows, conditions[1:]) if len(conditions) > 1 else []
     for limit in breadth:
-        limit.restrict(cond)
+        limit.restrict(cond.revert())
 
     return depth + breadth
 
