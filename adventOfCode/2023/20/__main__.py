@@ -47,9 +47,8 @@ class Module:
             name, level, origin = Module.pulses_queue.pop(0)
             if name == 'rx' and level == Pulse.LOW:
                 Module.rx_low_pulsed = True
-            # print(f"{origin} -{level.name}-> {name}")
+                print(f"{origin} -{level.name}-> {name}")
             Module.MODULES[name].pulse(level, origin)
-
 
     def get_count(self, pulse_level: Pulse) -> int:
         return self.pulses_count.get(pulse_level, 0)
